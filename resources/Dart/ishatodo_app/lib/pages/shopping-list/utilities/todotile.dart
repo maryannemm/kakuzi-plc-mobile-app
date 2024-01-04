@@ -6,6 +6,7 @@ class TodoTile extends StatefulWidget {
   final String? price; // Change the type to String
   final bool? isCompleted;
   final Function(bool?)? onChanged;
+
   final void Function(BuildContext)? deleteItem;
 
   const TodoTile({

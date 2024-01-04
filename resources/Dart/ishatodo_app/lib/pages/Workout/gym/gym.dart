@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:ishatodo_app/custom_bottomnav.dart';
 import 'package:ishatodo_app/pages/Workout/gym/excercise.dart';
 import 'package:ishatodo_app/pages/Workout/gym/gym_data.dart';
 import 'package:ishatodo_app/pages/Workout/gym/gympage.dart';
@@ -120,6 +121,7 @@ class _GymWorkoutState extends State<GymWorkout> {
               ),
             ],
           ),
+          bottomNavigationBar: const CustomBottomNavigation(),
         );
       },
     );

@@ -2,31 +2,24 @@ import 'package:hive_flutter/adapters.dart';
 import 'package:ishatodo_app/pages/Workout/gym/excercise.dart';
 import 'package:ishatodo_app/pages/Workout/gym/gym.dart';
 import 'package:ishatodo_app/pages/datetime/date_time.dart';
-import 'package:ishatodo_app/pages/shopping-list/utilities/totaltile.dart';
 
 class ToDoDatabase {
   final _mybox = Hive.box('newBox');
   List thingsToDo = [];
-  dynamic total = 0; // Declare the total variable
+  double total = 0;
 
-  // run function when first running this app
-  void createInitialData() {
-    // Your initialization logic here
-  }
-
-  // load data from the database
+  //run function when first running this app
+  void createIntialData() {}
+  //load data from database
   void loadData() {
     thingsToDo = _mybox.get('TODOLIST') ?? [];
-    final totalCost = _mybox.get('TOTAL') as Totalcost?;
-    total = totalCost?.total ?? 0;
+    total = (_mybox.get('TOTAL') ?? 0.0);
   }
 
-  // function to update data from the database
+  //function to update data from db
   void updateData() {
     _mybox.put('TODOLIST', thingsToDo);
-    // Save total to Hive
-    final totalCost = Totalcost(total: total);
-    _mybox.put('TOTAL', totalCost);
+    _mybox.put('TOTAL', total);
   }
 }
 

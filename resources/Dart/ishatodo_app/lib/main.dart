@@ -11,6 +11,7 @@ void main() async {
 
   // Open Hive boxes
   await Hive.openBox('newBox');
+  await Hive.openBox('totalBox');
   await Hive.openBox('choreBox');
   await Hive.openBox('gymHive');
 

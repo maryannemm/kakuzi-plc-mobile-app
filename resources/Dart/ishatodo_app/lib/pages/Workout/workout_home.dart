@@ -8,9 +8,10 @@ import 'package:ishatodo_app/pages/Workout/out.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 
 class WorkoutHome extends StatefulWidget {
-  const WorkoutHome({Key? key}) : super(key: key);
+  const WorkoutHome({super.key});
 
   @override
+  // ignore: library_private_types_in_public_api
   _WorkoutHomeState createState() => _WorkoutHomeState();
 }
 

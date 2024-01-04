@@ -2,7 +2,7 @@
 import 'package:flutter/material.dart';
 
 class Totalcost extends StatefulWidget {
-  final dynamic total; // Change the type to dynamic
+  final double total; // Change the type to dynamic
 
   const Totalcost({super.key, required this.total});
 
@@ -15,8 +15,9 @@ class _TotalcostState extends State<Totalcost> {
   Widget build(BuildContext context) {
     return Container(
       decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(10),
-          color: Colors.deepPurple[100]),
+        borderRadius: BorderRadius.circular(10),
+        color: Colors.deepPurple[100],
+      ),
       height: 100,
       width: 200,
       child: Center(

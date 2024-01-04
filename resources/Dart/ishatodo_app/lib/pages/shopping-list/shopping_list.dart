@@ -16,7 +16,7 @@ class _MyShoppingListState extends State<MyShoppingList> {
   ToDoDatabase db = ToDoDatabase();
   final _mycontroller = TextEditingController();
   final price = TextEditingController();
-  int total = 0;
+  double total = 0;
 
   @override
   void initState() {
@@ -35,6 +35,9 @@ class _MyShoppingListState extends State<MyShoppingList> {
 
   void deleteTask(int index) {
     setState(() {
+      double priceValue = double.tryParse(db.thingsToDo[index]['price']) ?? 0;
+      total -= priceValue;
+      db.total = total;
       db.thingsToDo.removeAt(index);
     });
     db.updateData();
@@ -47,7 +50,7 @@ class _MyShoppingListState extends State<MyShoppingList> {
         'isCompleted': false,
         'price': price.text,
       });
-      _incrementtotal();
+      db.total = _incrementtotal();
       _mycontroller.clear();
       price.clear();
       Navigator.of(context).pop();
@@ -55,11 +58,13 @@ class _MyShoppingListState extends State<MyShoppingList> {
     db.updateData();
   }
 
-  void _incrementtotal() {
-    setState(() {
-      int priceValue = int.tryParse(price.text) ?? 0;
+  double _incrementtotal() {
+    total = 0; // Reset total to calculate it again
+    for (var element in db.thingsToDo) {
+      double priceValue = double.tryParse(element['price']) ?? 0;
       total += priceValue;
-    });
+    }
+    return total;
   }
 
   checkIfTodoListIsEmpty() {
@@ -92,7 +97,7 @@ class _MyShoppingListState extends State<MyShoppingList> {
             } else {
               return Padding(
                 padding: const EdgeInsets.all(100),
-                child: Totalcost(total: total.toString()),
+                child: Totalcost(total: db.total),
               );
             }
           },
