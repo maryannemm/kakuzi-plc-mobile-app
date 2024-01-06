@@ -22,32 +22,38 @@ class ExcerciseTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.only(bottom: 20),
-      child: Container(
-        color: Colors.deepPurple[200],
-        child: ListTile(
-          title: Text(name),
-          subtitle: Wrap(
-            children: [
-              Chip(
-                label: Text('$weight weight'),
-              ),
-              Chip(
-                label: Text('$sets sets'),
-              ),
-              Chip(
-                label: Text('$reps reps'),
-              ),
-              Chip(label: Text("$duration minutes")),
-            ],
+    return StatefulBuilder(
+        builder: (BuildContext context, StateSetter setState) {
+      return Padding(
+        padding: const EdgeInsets.only(top: 5, left: 5, right: 5),
+        child: Container(
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(10.0),
+            color: Colors.deepPurple[200],
           ),
-          trailing: Checkbox(
-            value: isCompleted,
-            onChanged: onCheckboxChanged,
+          child: ListTile(
+            title: Text(name),
+            subtitle: Wrap(
+              children: [
+                Chip(
+                  label: Text('$weight weight'),
+                ),
+                Chip(
+                  label: Text('$sets sets'),
+                ),
+                Chip(
+                  label: Text('$reps reps'),
+                ),
+                Chip(label: Text("$duration minutes")),
+              ],
+            ),
+            trailing: Checkbox(
+              value: isCompleted,
+              onChanged: (val) => onCheckboxChanged!(val),
+            ),
           ),
         ),
-      ),
-    );
+      );
+    });
   }
 }

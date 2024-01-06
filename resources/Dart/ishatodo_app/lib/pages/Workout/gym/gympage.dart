@@ -96,10 +96,12 @@ class _GymPageState extends State<GymPage> {
     );
   }
 
-  void _checkboxChanged(String excerciseName, bool? value) {
+  void _checkboxChanged(String excerciseName, bool? value, String workoutName) {
     setState(() {
       completedExcercises[excerciseName] = value ?? false;
     });
+    Provider.of<GymData>(context, listen: false)
+        .excerciseIsChecked(workoutName, excerciseName);
   }
 
   @override
@@ -146,12 +148,13 @@ class _GymPageState extends State<GymPage> {
                     .name]!
                 : false,
             onCheckboxChanged: (val) => _checkboxChanged(
-              value
-                  .getRelevantWorkout(widget.workoutName)
-                  .excercise[index]
-                  .name,
-              val, // Pass the bool value directly
-            ),
+                value
+                    .getRelevantWorkout(widget.workoutName)
+                    .excercise[index]
+                    .name,
+                val,
+                widget.workoutName // Pass the bool value directly
+                ),
           ),
         ),
       ),

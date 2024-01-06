@@ -1,33 +1,48 @@
-// ignore_for_file: prefer_const_constructors
-
 import 'package:flutter/material.dart';
 import 'package:ishatodo_app/customdrawer.dart';
 import 'package:ishatodo_app/pages/Workout/gym/gym.dart';
 import 'package:ishatodo_app/pages/Workout/home/home.dart';
 import 'package:ishatodo_app/pages/Workout/out.dart';
-import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 
 class WorkoutHome extends StatefulWidget {
-  const WorkoutHome({super.key});
+  const WorkoutHome({Key? key}) : super(key: key);
 
   @override
-  // ignore: library_private_types_in_public_api
   _WorkoutHomeState createState() => _WorkoutHomeState();
 }
 
 class _WorkoutHomeState extends State<WorkoutHome> {
-  late final PageController _controller;
+  late PageController _pageController;
+  int _currentIndex = 0;
 
   @override
   void initState() {
     super.initState();
-    _controller = PageController();
+    _pageController = PageController(initialPage: _currentIndex);
+  }
+
+  @override
+  void dispose() {
+    _pageController.dispose();
+    super.dispose();
+  }
+
+  void _onPageChanged(int index) {
+    setState(() {
+      _currentIndex = index;
+    });
+  }
+
+  void _onBottomNavBarTap(int index) {
+    _pageController.animateToPage(
+      index,
+      duration: const Duration(milliseconds: 500),
+      curve: Curves.easeInOut,
+    );
   }
 
   @override
   Widget build(BuildContext context) {
-    final size = MediaQuery.of(context).size;
-
     return Scaffold(
       appBar: AppBar(
         title: const Text(
@@ -36,50 +51,35 @@ class _WorkoutHomeState extends State<WorkoutHome> {
         ),
       ),
       drawer: const CustomDrawer(),
-      body: SingleChildScrollView(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            SizedBox(
-              height: size.height * 0.75,
-              child: PageView(
-                controller: _controller,
-                children: [
-                  GestureDetector(
-                    onTap: () {
-                      Navigator.pushNamed(context, '/workout-home/gym');
-                    },
-                    child: AnimatedContainer(
-                      duration: const Duration(seconds: 1),
-                      color: Colors.deepPurple[400],
-                      child: GymWorkout(excercise: const [], workoutName: ""),
-                    ),
-                  ),
-                  AnimatedContainer(
-                    duration: const Duration(seconds: 1),
-                    color: Colors.green,
-                    child: HomeWorkout(),
-                  ),
-                  AnimatedContainer(
-                    duration: const Duration(seconds: 1),
-                    color: Colors.blue,
-                    child: OutWorkout(),
-                  ),
-                ],
-              ),
-            ),
-            SmoothPageIndicator(
-              controller: _controller,
-              count: 3,
-              effect: const JumpingDotEffect(
-                dotColor: Color.fromARGB(255, 205, 184, 242),
-                activeDotColor: Color.fromARGB(255, 116, 67, 214),
-                spacing: 30,
-                verticalOffset: 10,
-              ),
-            ),
-          ],
-        ),
+      body: PageView(
+        controller: _pageController,
+        onPageChanged: _onPageChanged,
+        children: [
+          GymWorkout(
+            excercise: [], // Add your exercise data here
+            workoutName: "Gym Workout",
+          ),
+          HomeWorkout(),
+          OutWorkout(),
+        ],
+      ),
+      bottomNavigationBar: BottomNavigationBar(
+        currentIndex: _currentIndex,
+        onTap: _onBottomNavBarTap,
+        items: const [
+          BottomNavigationBarItem(
+            icon: Icon(Icons.fitness_center),
+            label: 'Gym',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.home),
+            label: 'Home',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.directions_run),
+            label: 'Out',
+          ),
+        ],
       ),
     );
   }

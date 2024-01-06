@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:ishatodo_app/pages/Workout/gym/excercise.dart';
 import 'package:ishatodo_app/pages/data/database.dart';
+import 'package:ishatodo_app/pages/datetime/date_time.dart';
 
 import '../gym/gym.dart';
 
@@ -27,14 +28,16 @@ class GymData extends ChangeNotifier {
     } else {
       gdb.saveToDatabase(workoutList);
     }
+    //load heatmap
+    loadHeatMap();
   }
 
-//get list of workouts
+  //get list of workouts
   List<GymWorkout> getGymWorkoutList() {
     return workoutList;
   }
 
-//add or create a gym workout
+  //add or create a gym workout
   void addWorkout(String name) {
     workoutList.add(
       GymWorkout(workoutName: name, excercise: const []),
@@ -71,8 +74,11 @@ class GymData extends ChangeNotifier {
     Excercise relevantExcercise =
         getRelevantExcercise(workoutName, excerciseName);
     relevantExcercise.isCompleted = !relevantExcercise.isCompleted;
-    notifyListeners();
     gdb.saveToDatabase(workoutList);
+    // Load heatmap
+    loadHeatMap();
+    // Notify listeners
+    notifyListeners();
   }
 
   //code to get the relevant workout throught its name
@@ -88,5 +94,37 @@ class GymData extends ChangeNotifier {
     Excercise relevantExcercise = relevantWorkout.excercise
         .firstWhere((element) => element.name == excerciseName);
     return relevantExcercise;
+  }
+  //get the startdate for heatmap
+
+  String getStartDate() {
+    return gdb.getStartDate();
+  }
+
+  Map<DateTime, int> heatmapDataset = {};
+  //load heatmap
+  void loadHeatMap() {
+    DateTime startDate = createDateTimeObject(getStartDate());
+    //howmany days to load
+    int daysInBetween = DateTime.now().difference(startDate).inDays;
+    //check completion staus of each day
+
+    for (int i = 0; i < daysInBetween + 1; i++) {
+      String yyyymmdd =
+          convertDateTimeToYYYYMMDD(startDate.add(Duration(days: i)));
+      int completionStatus = gdb.getCompletionStatus(yyyymmdd);
+
+      //get year
+      int year = startDate.add(Duration(days: i)).year;
+      //get month
+      int month = year = startDate.add(Duration(days: i)).month;
+      //get day
+      int day = year = startDate.add(Duration(days: i)).day;
+
+      final percentForEachDay = <DateTime, int>{
+        DateTime(year, month, day): completionStatus
+      };
+      heatmapDataset.addEntries(percentForEachDay.entries);
+    }
   }
 }

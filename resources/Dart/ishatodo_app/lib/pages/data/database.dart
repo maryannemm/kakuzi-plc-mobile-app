@@ -128,9 +128,8 @@ class GymDatabase {
 
   //get completion status for heatmap
   int getCompletionStatus(String yyyymmdd) {
-    int completionStatus =
-        int.parse(_gymBox.get('COMPLETION_STATUS$yyyymmdd') ?? 0);
-    return completionStatus;
+    // Use ?? 0 to provide a default value if the key is not present in the Hive box
+    return _gymBox.get('COMPLETION_STATUS_$yyyymmdd') as int? ?? 0;
   }
 }
 

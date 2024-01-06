@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:ishatodo_app/custom_bottomnav.dart';
 import 'package:ishatodo_app/pages/Workout/gym/excercise.dart';
 import 'package:ishatodo_app/pages/Workout/gym/gym_data.dart';
 import 'package:ishatodo_app/pages/Workout/gym/gympage.dart';
+import 'package:ishatodo_app/pages/heatmap/heat_map.dart';
 import 'package:ishatodo_app/pages/shopping-list/utilities/button.dart';
 import 'package:provider/provider.dart';
 
@@ -102,26 +102,48 @@ class _GymWorkoutState extends State<GymWorkout> {
                         color: Colors.deepPurple[200],
                         child: value.getGymWorkoutList().isEmpty
                             ? _buildEmptyListWidget()
-                            : ListTile(
-                                title: Text(value
-                                    .getGymWorkoutList()[index]
-                                    .workoutName),
-                                trailing: IconButton(
-                                  icon: const Icon(Icons.arrow_forward),
-                                  onPressed: () => newGymWorkoutPage(value
-                                      .getGymWorkoutList()[index]
-                                      .workoutName),
-                                ),
+                            : Column(
+                                children: [
+                                  Container(
+                                    color: Colors.white54,
+                                    child: MyHeatMap(
+                                      dataSet: value.heatmapDataset,
+                                      startDateYYYYMMDD: value.getStartDate(),
+                                    ),
+                                  ),
+                                  ListView.builder(
+                                    shrinkWrap: true,
+                                    itemCount: value.getGymWorkoutList().length,
+                                    itemBuilder:
+                                        (BuildContext context, int index) {
+                                      return ListTile(
+                                        title: Text(
+                                          value
+                                              .getGymWorkoutList()[index]
+                                              .workoutName,
+                                        ),
+                                        trailing: IconButton(
+                                          icon: const Icon(Icons.arrow_forward),
+                                          onPressed: () => newGymWorkoutPage(
+                                            value
+                                                .getGymWorkoutList()[index]
+                                                .workoutName,
+                                          ),
+                                        ),
+                                      );
+                                    },
+                                  ),
+                                ],
                               ),
                       );
                     },
-                    childCount: value.getGymWorkoutList().length,
+                    childCount: 1, // Since you have only one ListView.builder
                   ),
                 ),
               ),
             ],
           ),
-          bottomNavigationBar: const CustomBottomNavigation(),
+          //bottomNavigationBar: const CustomBottomNavigation(),
         );
       },
     );
