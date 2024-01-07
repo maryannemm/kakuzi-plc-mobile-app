@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:ishatodo_app/pages/Workout/gym/excercise.dart';
 import 'package:ishatodo_app/pages/Workout/gym/gym_data.dart';
 import 'package:ishatodo_app/pages/Workout/gym/gympage.dart';
@@ -9,9 +10,14 @@ import 'package:provider/provider.dart';
 // ignore: must_be_immutable
 class GymWorkout extends StatefulWidget {
   final String workoutName;
+  final void Function(BuildContext)? deleteWorkout;
   List<Excercise> excercise = [];
 
-  GymWorkout({super.key, required this.workoutName, required this.excercise});
+  GymWorkout(
+      {super.key,
+      required this.workoutName,
+      required this.excercise,
+      this.deleteWorkout});
 
   @override
   // ignore: library_private_types_in_public_api
@@ -99,16 +105,21 @@ class _GymWorkoutState extends State<GymWorkout> {
                   delegate: SliverChildBuilderDelegate(
                     (BuildContext context, int index) {
                       return Container(
-                        color: Colors.deepPurple[200],
+                        color: Colors.deepPurple[500],
                         child: value.getGymWorkoutList().isEmpty
                             ? _buildEmptyListWidget()
                             : Column(
                                 children: [
                                   Container(
                                     color: Colors.white54,
-                                    child: MyHeatMap(
-                                      dataSet: value.heatmapDataset,
-                                      startDateYYYYMMDD: value.getStartDate(),
+                                    child: Consumer<GymData>(
+                                      builder: (context, value, child) {
+                                        return MyHeatMap(
+                                          dataSet: value.heatmapDataset,
+                                          startDateYYYYMMDD:
+                                              value.getStartDate(),
+                                        );
+                                      },
                                     ),
                                   ),
                                   ListView.builder(
@@ -116,18 +127,48 @@ class _GymWorkoutState extends State<GymWorkout> {
                                     itemCount: value.getGymWorkoutList().length,
                                     itemBuilder:
                                         (BuildContext context, int index) {
-                                      return ListTile(
-                                        title: Text(
-                                          value
-                                              .getGymWorkoutList()[index]
-                                              .workoutName,
-                                        ),
-                                        trailing: IconButton(
-                                          icon: const Icon(Icons.arrow_forward),
-                                          onPressed: () => newGymWorkoutPage(
-                                            value
-                                                .getGymWorkoutList()[index]
-                                                .workoutName,
+                                      return Padding(
+                                        padding: const EdgeInsets.only(
+                                            top: 8.0, right: 8.0, left: 8.0),
+                                        child: Slidable(
+                                          endActionPane: ActionPane(
+                                            motion: const StretchMotion(),
+                                            children: [
+                                              SlidableAction(
+                                                borderRadius:
+                                                    BorderRadius.circular(10),
+                                                backgroundColor: Colors.purple,
+                                                onPressed: (val) {
+                                                  value.deleteWorkout(index);
+                                                },
+                                                icon: Icons.delete_forever,
+                                              ),
+                                            ],
+                                          ),
+                                          child: Container(
+                                            padding: const EdgeInsets.all(15),
+                                            decoration: BoxDecoration(
+                                                color: Colors.deepPurple[200],
+                                                borderRadius:
+                                                    BorderRadius.circular(10)),
+                                            child: ListTile(
+                                              title: Text(
+                                                value
+                                                    .getGymWorkoutList()[index]
+                                                    .workoutName,
+                                              ),
+                                              trailing: IconButton(
+                                                icon: const Icon(
+                                                    Icons.arrow_forward),
+                                                onPressed: () =>
+                                                    newGymWorkoutPage(
+                                                  value
+                                                      .getGymWorkoutList()[
+                                                          index]
+                                                      .workoutName,
+                                                ),
+                                              ),
+                                            ),
                                           ),
                                         ),
                                       );

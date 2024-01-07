@@ -102,6 +102,9 @@ class _GymPageState extends State<GymPage> {
     });
     Provider.of<GymData>(context, listen: false)
         .excerciseIsChecked(workoutName, excerciseName);
+    // Save the updated state to the database
+    Provider.of<GymData>(context, listen: false).gdb.saveToDatabase(
+        Provider.of<GymData>(context, listen: false).workoutList);
   }
 
   @override
@@ -116,47 +119,44 @@ class _GymPageState extends State<GymPage> {
           child: const Icon(Icons.add),
         ),
         body: ListView.builder(
-          itemCount: value.numberOfExcercisesInAWOrkout(widget.workoutName),
-          itemBuilder: (context, index) => ExcerciseTile(
-            name: value
-                .getRelevantWorkout(widget.workoutName)
-                .excercise[index]
-                .name,
-            reps: value
-                .getRelevantWorkout(widget.workoutName)
-                .excercise[index]
-                .reps,
-            weight: value
-                .getRelevantWorkout(widget.workoutName)
-                .excercise[index]
-                .weight,
-            sets: value
-                .getRelevantWorkout(widget.workoutName)
-                .excercise[index]
-                .sets,
-            duration: int.parse(value
-                .getRelevantWorkout(widget.workoutName)
-                .excercise[index]
-                .duration),
-            isCompleted: completedExcercises.containsKey(value
-                    .getRelevantWorkout(widget.workoutName)
-                    .excercise[index]
-                    .name)
-                ? completedExcercises[value
-                    .getRelevantWorkout(widget.workoutName)
-                    .excercise[index]
-                    .name]!
-                : false,
-            onCheckboxChanged: (val) => _checkboxChanged(
-                value
-                    .getRelevantWorkout(widget.workoutName)
-                    .excercise[index]
-                    .name,
-                val,
-                widget.workoutName // Pass the bool value directly
-                ),
-          ),
-        ),
+            itemCount: value.numberOfExcercisesInAWOrkout(widget.workoutName),
+            itemBuilder: (context, index) => ExcerciseTile(
+                  name: value
+                      .getRelevantWorkout(widget.workoutName)
+                      .excercise[index]
+                      .name,
+                  reps: value
+                      .getRelevantWorkout(widget.workoutName)
+                      .excercise[index]
+                      .reps,
+                  weight: value
+                      .getRelevantWorkout(widget.workoutName)
+                      .excercise[index]
+                      .weight,
+                  sets: value
+                      .getRelevantWorkout(widget.workoutName)
+                      .excercise[index]
+                      .sets,
+                  duration: int.parse(value
+                      .getRelevantWorkout(widget.workoutName)
+                      .excercise[index]
+                      .duration),
+                  isCompleted: Provider.of<GymData>(context)
+                      .getRelevantExcercise(
+                          widget.workoutName,
+                          value
+                              .getRelevantWorkout(widget.workoutName)
+                              .excercise[index]
+                              .name)
+                      .isCompleted,
+                  onCheckboxChanged: (val) => _checkboxChanged(
+                      value
+                          .getRelevantWorkout(widget.workoutName)
+                          .excercise[index]
+                          .name,
+                      val,
+                      widget.workoutName),
+                )),
       ),
     );
   }

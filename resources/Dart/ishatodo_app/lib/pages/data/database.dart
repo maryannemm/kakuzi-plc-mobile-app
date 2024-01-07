@@ -38,34 +38,30 @@ class ChoreDatabase {
 }
 
 class GymDatabase {
-  //reference hive box
   final _gymBox = Hive.box('gymHive');
 
-  //check if previous data exists
   bool previousDataExists() {
     if (_gymBox.isEmpty) {
       _gymBox.put('START_DATE', todaysDateyyyymmdd());
       return false;
     } else {
-      // ignore: avoid_print
       print('previous data exists');
       return true;
     }
   }
 
-  //check if data is stored if not record start date
   String getStartDate() {
     return _gymBox.get('START_DATE');
   }
 
-  //write data
   void saveToDatabase(List<GymWorkout> workouts) {
     final workoutList = convertObjectWorkoutlist(workouts);
-    final excerciseList = convertObjectToExcerciseList(workouts);
-    bool excerciseCompleted(List<GymWorkout> workouts) {
+    final exerciseList = convertObjectToExcerciseList(workouts);
+
+    bool exerciseCompleted(List<GymWorkout> workouts) {
       for (var workout in workouts) {
-        for (var excercise in workout.excercise) {
-          if (excercise.isCompleted) {
+        for (var exercise in workout.excercise) {
+          if (exercise.isCompleted) {
             return true;
           }
         }
@@ -73,96 +69,83 @@ class GymDatabase {
       return false;
     }
 
-    if (excerciseCompleted(workouts)) {
-      _gymBox.put('COMPLETION_STATUS_${todaysDateyyyymmdd()}', 1);
+    String workoutDate = todaysDateyyyymmdd();
+
+    if (exerciseCompleted(workouts)) {
+      _gymBox.put('COMPLETION_STATUS_$workoutDate', 1);
     } else {
-      _gymBox.put('COMPLETION_STATUS_${todaysDateyyyymmdd()}', 0);
+      _gymBox.put('COMPLETION_STATUS_$workoutDate', 0);
     }
-// Save to Hive
+
     _gymBox.put('GYM_WORKOUTS', workoutList);
-    _gymBox.put('EXCERCISE', excerciseList);
+    _gymBox.put('EXERCISE', exerciseList);
   }
 
-  //read data from databse
+  void saveToDatabaseCompletionStatus(String yyyymmdd, int completionStatus) {
+    _gymBox.put('COMPLETION_STATUS_$yyyymmdd', completionStatus);
+  }
+
   List<GymWorkout> readFromDB() {
-    List<GymWorkout> mySavedgymWOrkouts = [];
+    List<GymWorkout> mySavedGymWorkouts = [];
     List<String>? workoutNames = _gymBox.get('GYM_WORKOUTS');
-    final exerciseDetails = _gymBox.get('EXCERCISE') ?? [];
+    final exerciseDetails = _gymBox.get('EXERCISE') ?? [];
 
     if (workoutNames != null) {
       for (int i = 0; i < workoutNames.length; i++) {
-        List<Excercise> excercisesInEachWOrkout = [];
-        List<dynamic>? currentWorkout = exerciseDetails[i] as List<dynamic>?;
+        if (i < exerciseDetails.length) {
+          // Check if index is within bounds
+          List<Excercise> exercisesInEachWorkout = [];
+          List<dynamic>? currentWorkout = exerciseDetails[i] as List<dynamic>?;
 
-        if (currentWorkout != null) {
-          for (int j = 0; j < currentWorkout.length; j++) {
-            List<dynamic> exerciseDetail = currentWorkout[j] as List<dynamic>;
+          if (currentWorkout != null) {
+            for (int j = 0; j < currentWorkout.length; j++) {
+              List<dynamic> exerciseDetail = currentWorkout[j] as List<dynamic>;
 
-            excercisesInEachWOrkout.add(Excercise(
-              name: exerciseDetail[0],
-              reps: exerciseDetail[1],
-              weight: exerciseDetail[2],
-              sets: exerciseDetail[3],
-              duration: exerciseDetail[4],
-              isCompleted: exerciseDetail[5] == 'true' ? true : false,
-            ));
+              exercisesInEachWorkout.add(Excercise(
+                name: exerciseDetail[0],
+                reps: exerciseDetail[1],
+                weight: exerciseDetail[2],
+                sets: exerciseDetail[3],
+                duration: exerciseDetail[4],
+                isCompleted: exerciseDetail[5] == 'true',
+              ));
+            }
+
+            GymWorkout workout = GymWorkout(
+              workoutName: workoutNames[i],
+              excercise: exercisesInEachWorkout,
+            );
+
+            mySavedGymWorkouts.add(workout);
           }
-
-          // Create individual workout
-          GymWorkout workout = GymWorkout(
-            workoutName: workoutNames[i],
-            excercise: excercisesInEachWOrkout,
-          );
-
-          mySavedgymWOrkouts.add(workout);
         }
       }
     }
 
-    return mySavedgymWOrkouts;
+    return mySavedGymWorkouts;
   }
 
-  //return the start date as yyyymmdd
-
-  //check if excercises have been done
-
-  //get completion status for heatmap
   int getCompletionStatus(String yyyymmdd) {
-    // Use ?? 0 to provide a default value if the key is not present in the Hive box
-    return _gymBox.get('COMPLETION_STATUS_$yyyymmdd') as int? ?? 0;
+    return _gymBox.get('COMPLETION_STATUS_$yyyymmdd');
   }
 }
 
-//convert workout objects ino a list
 List<String> convertObjectWorkoutlist(List<GymWorkout> workouts) {
-  List<String> gymWorkoutList = [];
-  for (int i = 0; i < workouts.length; i++) {
-    gymWorkoutList.add(workouts[i].workoutName);
-  }
-  return gymWorkoutList;
+  return workouts.map((workout) => workout.workoutName).toList();
 }
 
-//converts excercises in a workout to a list of strings
 List<List<List<String>>> convertObjectToExcerciseList(
     List<GymWorkout> workouts) {
-  List<List<List<String>>> excerciseList = [];
-  for (int i = 0; i < workouts.length; i++) {
-    List<Excercise> excerciseInAWorkout = workouts[i].excercise;
-    List<List<String>> individualWorkout = [];
-
-    for (int a = 0; a < excerciseInAWorkout.length; a++) {
-      List<String> individualExcercise = [];
-      individualExcercise.addAll([
-        excerciseInAWorkout[a].name,
-        excerciseInAWorkout[a].reps,
-        excerciseInAWorkout[a].sets,
-        excerciseInAWorkout[a].weight,
-        excerciseInAWorkout[a].duration.toString(),
-        excerciseInAWorkout[a].isCompleted.toString(),
-      ]);
-      individualWorkout.add(individualExcercise);
-    }
-    excerciseList.add(individualWorkout);
-  }
-  return excerciseList;
+  return workouts.map((workout) {
+    return workout.excercise.map((exercise) {
+      return [
+        exercise.name,
+        exercise.reps,
+        exercise.weight,
+        exercise.sets,
+        exercise.duration,
+        exercise.isCompleted.toString(),
+      ];
+    }).toList();
+  }).toList();
 }

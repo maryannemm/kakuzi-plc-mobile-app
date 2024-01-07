@@ -40,8 +40,16 @@ class GymData extends ChangeNotifier {
   //add or create a gym workout
   void addWorkout(String name) {
     workoutList.add(
-      GymWorkout(workoutName: name, excercise: const []),
+      // ignore: prefer_const_literals_to_create_immutables
+      GymWorkout(workoutName: name, excercise: []),
     );
+    notifyListeners();
+    gdb.saveToDatabase(workoutList);
+  }
+
+// delete workout
+  void deleteWorkout(int index) {
+    workoutList.removeAt(index);
     notifyListeners();
     gdb.saveToDatabase(workoutList);
   }
@@ -70,13 +78,18 @@ class GymData extends ChangeNotifier {
   }
 
   //check off an excercise
+  // check off an exercise
   void excerciseIsChecked(String workoutName, String excerciseName) {
     Excercise relevantExcercise =
         getRelevantExcercise(workoutName, excerciseName);
     relevantExcercise.isCompleted = !relevantExcercise.isCompleted;
+
+    // Save to the database
     gdb.saveToDatabase(workoutList);
+
     // Load heatmap
     loadHeatMap();
+
     // Notify listeners
     notifyListeners();
   }
@@ -102,29 +115,25 @@ class GymData extends ChangeNotifier {
   }
 
   Map<DateTime, int> heatmapDataset = {};
+
   //load heatmap
   void loadHeatMap() {
     DateTime startDate = createDateTimeObject(getStartDate());
-    //howmany days to load
     int daysInBetween = DateTime.now().difference(startDate).inDays;
-    //check completion staus of each day
 
     for (int i = 0; i < daysInBetween + 1; i++) {
       String yyyymmdd =
           convertDateTimeToYYYYMMDD(startDate.add(Duration(days: i)));
       int completionStatus = gdb.getCompletionStatus(yyyymmdd);
 
-      //get year
       int year = startDate.add(Duration(days: i)).year;
-      //get month
-      int month = year = startDate.add(Duration(days: i)).month;
-      //get day
-      int day = year = startDate.add(Duration(days: i)).day;
+      int month = startDate.add(Duration(days: i)).month;
+      int day = startDate.add(Duration(days: i)).day;
+      gdb.saveToDatabaseCompletionStatus(yyyymmdd, completionStatus);
+      print('completion: $completionStatus');
 
-      final percentForEachDay = <DateTime, int>{
-        DateTime(year, month, day): completionStatus
-      };
-      heatmapDataset.addEntries(percentForEachDay.entries);
+      heatmapDataset[DateTime(year, month, day)] = completionStatus;
     }
+    print('Updated Heatmap Dataset: $heatmapDataset');
   }
 }
