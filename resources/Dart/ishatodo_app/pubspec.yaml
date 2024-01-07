@@ -43,7 +43,7 @@ dependencies:
   flutter_svg: ^2.0.9
   smooth_page_indicator: ^1.1.0
   provider:
-  flutter_map_heatmap: ^0.0.7
+  
   flutter_heatmap_calendar: ^1.0.5
   google_fonts: ^6.1.0
 

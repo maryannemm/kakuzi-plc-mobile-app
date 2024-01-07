@@ -1,6 +1,7 @@
 // ignore_for_file: prefer_const_constructors
 
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 
 class CustomDrawer extends StatelessWidget {
   const CustomDrawer({super.key});
@@ -18,7 +19,11 @@ class CustomDrawer extends StatelessWidget {
               Navigator.pushNamed(context, '/home');
             },
             child: ListTile(
-              leading: Icon(Icons.home),
+              leading: SvgPicture.asset(
+                'lib/pages/images/homeicon.svg',
+                width: 24,
+                height: 24,
+              ),
               title: Text('Home Page'),
             ),
           ),
@@ -29,7 +34,11 @@ class CustomDrawer extends StatelessWidget {
               Navigator.pushNamed(context, '/shopping-list');
             },
             child: ListTile(
-              leading: Icon(Icons.shopping_cart),
+              leading: SvgPicture.asset(
+                'lib/pages/images/shopicon1.svg',
+                width: 27,
+                height: 27,
+              ),
               title: Text('Shopping List'),
             ),
           ),
@@ -39,8 +48,12 @@ class CustomDrawer extends StatelessWidget {
               Navigator.pushNamed(context, '/Chores-list');
             },
             child: ListTile(
-              leading: Icon(Icons.cleaning_services),
-              title: Text('Chores List'),
+              leading: SvgPicture.asset(
+                'lib/pages/images/checlisticon.svg',
+                width: 24,
+                height: 24,
+              ),
+              title: Text('Check List'),
             ),
           ),
           GestureDetector(
@@ -49,7 +62,11 @@ class CustomDrawer extends StatelessWidget {
               Navigator.pushNamed(context, '/workout-home');
             },
             child: ListTile(
-              leading: Icon(Icons.fitness_center),
+              leading: SvgPicture.asset(
+                'lib/pages/images/gym.svg',
+                width: 27,
+                height: 27,
+              ),
               title: Text('Work Out'),
             ),
           ),

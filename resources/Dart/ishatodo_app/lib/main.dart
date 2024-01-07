@@ -50,6 +50,9 @@ class _MyAppState extends State<MyApp> {
         title: 'Baggishas home',
         debugShowCheckedModeBanner: false,
         theme: ThemeData(
+          iconTheme: const IconThemeData(
+            color: Colors.indigo,
+          ),
           primarySwatch: Colors.deepPurple,
           appBarTheme: AppBarTheme(
             backgroundColor: Colors.deepPurple[300],

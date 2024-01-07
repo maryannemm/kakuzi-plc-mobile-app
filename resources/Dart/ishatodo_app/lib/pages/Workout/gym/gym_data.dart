@@ -64,7 +64,9 @@ class GymData extends ChangeNotifier {
         reps: reps,
         weight: weight,
         sets: sets,
-        duration: duration.toString(), // Make sure duration is passed as an int
+        duration: duration.toString(),
+
+        // Make sure duration is passed as an int
       ),
     );
     notifyListeners();
@@ -124,16 +126,14 @@ class GymData extends ChangeNotifier {
     for (int i = 0; i < daysInBetween + 1; i++) {
       String yyyymmdd =
           convertDateTimeToYYYYMMDD(startDate.add(Duration(days: i)));
+
       int completionStatus = gdb.getCompletionStatus(yyyymmdd);
 
       int year = startDate.add(Duration(days: i)).year;
       int month = startDate.add(Duration(days: i)).month;
       int day = startDate.add(Duration(days: i)).day;
-      gdb.saveToDatabaseCompletionStatus(yyyymmdd, completionStatus);
-      print('completion: $completionStatus');
 
       heatmapDataset[DateTime(year, month, day)] = completionStatus;
     }
-    print('Updated Heatmap Dataset: $heatmapDataset');
   }
 }

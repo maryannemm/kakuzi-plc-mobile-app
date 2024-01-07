@@ -45,7 +45,6 @@ class GymDatabase {
       _gymBox.put('START_DATE', todaysDateyyyymmdd());
       return false;
     } else {
-      print('previous data exists');
       return true;
     }
   }
@@ -58,17 +57,6 @@ class GymDatabase {
     final workoutList = convertObjectWorkoutlist(workouts);
     final exerciseList = convertObjectToExcerciseList(workouts);
 
-    bool exerciseCompleted(List<GymWorkout> workouts) {
-      for (var workout in workouts) {
-        for (var exercise in workout.excercise) {
-          if (exercise.isCompleted) {
-            return true;
-          }
-        }
-      }
-      return false;
-    }
-
     String workoutDate = todaysDateyyyymmdd();
 
     if (exerciseCompleted(workouts)) {
@@ -79,6 +67,17 @@ class GymDatabase {
 
     _gymBox.put('GYM_WORKOUTS', workoutList);
     _gymBox.put('EXERCISE', exerciseList);
+  }
+
+  bool exerciseCompleted(List<GymWorkout> workouts) {
+    for (var workout in workouts) {
+      for (var exercise in workout.excercise) {
+        if (exercise.isCompleted) {
+          return true;
+        }
+      }
+    }
+    return false;
   }
 
   void saveToDatabaseCompletionStatus(String yyyymmdd, int completionStatus) {
@@ -107,7 +106,7 @@ class GymDatabase {
                 weight: exerciseDetail[2],
                 sets: exerciseDetail[3],
                 duration: exerciseDetail[4],
-                isCompleted: exerciseDetail[5] == 'true',
+                isCompleted: exerciseDetail[5] == 'true' ? true : false,
               ));
             }
 
@@ -126,7 +125,10 @@ class GymDatabase {
   }
 
   int getCompletionStatus(String yyyymmdd) {
-    return _gymBox.get('COMPLETION_STATUS_$yyyymmdd');
+    var completionStatus = _gymBox.get('COMPLETION_STATUS_$yyyymmdd');
+
+    // Check if completionStatus is not null before returning
+    return completionStatus ?? 0;
   }
 }
 

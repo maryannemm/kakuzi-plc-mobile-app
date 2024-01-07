@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:ishatodo_app/pages/chores-list/utilities/choretile.dart';
 import 'package:ishatodo_app/pages/data/database.dart';
 import 'package:ishatodo_app/pages/chores-list/utilities/createchoredialogue.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 
 class ChoreList extends StatefulWidget {
   const ChoreList({super.key});
@@ -62,7 +63,7 @@ class _ChoreListState extends State<ChoreList> {
       return const Padding(
         padding: EdgeInsets.all(30),
         child: Text(
-          'Your Chore List is Empty.',
+          'Your Check List is Empty.',
           style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
         ),
       );
@@ -106,16 +107,26 @@ class _ChoreListState extends State<ChoreList> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Chores List'),
+        title: const Text('Check List'),
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: createItem,
         child: const Icon(Icons.add),
       ),
-      body: Column(
+      body: Stack(
         children: [
-          Expanded(
-            child: checkIfToDoListIsEmpty(),
+          SvgPicture.asset(
+            'lib/pages/images/checklist.svg', // Replace with the correct path
+            fit: BoxFit.cover,
+            width: MediaQuery.of(context).size.width * .75,
+            height: MediaQuery.of(context).size.height * .75,
+          ),
+          Column(
+            children: [
+              Expanded(
+                child: checkIfToDoListIsEmpty(),
+              ),
+            ],
           ),
         ],
       ),

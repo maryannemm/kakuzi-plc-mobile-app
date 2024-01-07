@@ -4,6 +4,7 @@ import 'package:ishatodo_app/pages/shopping-list/utilities/dialoguebox.dart';
 import 'package:ishatodo_app/pages/shopping-list/utilities/totaltile.dart';
 import 'utilities/todotile.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 
 class MyShoppingList extends StatefulWidget {
   const MyShoppingList({super.key});
@@ -72,11 +73,14 @@ class _MyShoppingListState extends State<MyShoppingList> {
       return GridTile(
         child: Padding(
           padding: const EdgeInsets.all(20),
-          child: Text(
-            'Your Shopping List is currently empty, add something',
-            style: GoogleFonts.lato(
-              fontWeight: FontWeight.bold,
-              fontSize: 20,
+          child: Container(
+            decoration: const BoxDecoration(color: Colors.white54),
+            child: Text(
+              'Your Shopping List is currently empty, add something',
+              style: GoogleFonts.lato(
+                fontWeight: FontWeight.bold,
+                fontSize: 20,
+              ),
             ),
           ),
         ),
@@ -127,10 +131,20 @@ class _MyShoppingListState extends State<MyShoppingList> {
         onPressed: createShoppingItem,
         child: const Icon(Icons.add),
       ),
-      body: Column(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      body: Stack(
         children: [
-          checkIfTodoListIsEmpty(),
+          SvgPicture.asset(
+            'lib/pages/images/shopping.svg', // Replace with the correct path
+            fit: BoxFit.cover,
+            width: MediaQuery.of(context).size.width * .75,
+            height: MediaQuery.of(context).size.height * .75,
+          ),
+          Column(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              checkIfTodoListIsEmpty(),
+            ],
+          ),
         ],
       ),
     );

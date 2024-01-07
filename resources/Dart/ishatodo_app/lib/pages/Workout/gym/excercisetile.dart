@@ -10,7 +10,7 @@ class ExcerciseTile extends StatefulWidget {
   final ValueChanged<bool?>? onCheckboxChanged;
 
   const ExcerciseTile({
-    Key? key,
+    super.key,
     required this.name,
     required this.reps,
     required this.weight,
@@ -18,7 +18,7 @@ class ExcerciseTile extends StatefulWidget {
     required this.duration,
     required this.isCompleted,
     required this.onCheckboxChanged,
-  }) : super(key: key);
+  });
 
   @override
   _ExcerciseTileState createState() => _ExcerciseTileState();
@@ -41,7 +41,7 @@ class _ExcerciseTileState extends State<ExcerciseTile> {
               Chip(
                 label: Text('${widget.weight} weight'),
               ),
-              Text('${widget.isCompleted}'),
+              //Text('${widget.isCompleted}'), // for debug
               Chip(
                 label: Text('${widget.sets} sets'),
               ),

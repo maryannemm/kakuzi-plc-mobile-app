@@ -100,6 +100,12 @@ class _GymPageState extends State<GymPage> {
     setState(() {
       completedExcercises[excerciseName] = value ?? false;
     });
+    // Update the completion status in the database
+    int completionStatus = completedExcercises.containsValue(true) ? 1 : 0;
+    Provider.of<GymData>(context, listen: false)
+        .gdb
+        .saveToDatabaseCompletionStatus(workoutName, completionStatus);
+
     Provider.of<GymData>(context, listen: false)
         .excerciseIsChecked(workoutName, excerciseName);
     // Save the updated state to the database

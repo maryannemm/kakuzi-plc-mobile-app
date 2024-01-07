@@ -16,18 +16,23 @@ class MyHeatMap extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       padding: const EdgeInsets.all(25),
+      decoration: BoxDecoration(
+          color: Colors.deepPurple[300],
+          borderRadius: BorderRadius.circular(20)),
       child: HeatMap(
         datasets: dataSet,
+        // ... other entries ...
+
+        //datasets: dataSet,
         startDate: createDateTimeObject(startDateYYYYMMDD),
-        endDate: DateTime.now().add(Duration(days: 0)),
+        endDate: DateTime.now().add(const Duration(days: 60)),
         showText: true,
         colorMode: ColorMode.color,
+        textColor: Colors.black,
         scrollable: true,
         colorsets: const {
-          7: Colors.pink,
-          9: Colors.blue,
-          11: Colors.indigo,
-          13: Colors.deepPurple,
+          1: Color.fromARGB(255, 193, 93, 210),
+          2: Colors.purple,
         },
       ),
     );

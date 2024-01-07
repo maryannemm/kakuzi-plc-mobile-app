@@ -4,7 +4,7 @@ import 'package:ishatodo_app/home.dart';
 import 'package:ishatodo_app/pages/Workout/gym/gym.dart';
 import 'package:flutter/material.dart';
 import 'package:ishatodo_app/pages/Workout/gym/gympage.dart';
-import 'package:ishatodo_app/pages/Workout/workout_home.dart';
+import 'package:ishatodo_app/pages/Workout/home/workout_home.dart';
 import 'package:ishatodo_app/pages/chores-list/chores_list.dart';
 
 import 'pages/shopping-list/shopping_list.dart';

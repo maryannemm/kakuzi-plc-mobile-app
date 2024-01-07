@@ -1,21 +1,12 @@
 //returns todays date
+import 'package:intl/intl.dart';
 
 //converts datetime object to a string
 String todaysDateyyyymmdd() {
   var dateTimeObject = DateTime.now();
+  var formatter = DateFormat('yyyyMMdd');
+  String yyyymmdd = formatter.format(dateTimeObject);
 
-  String year = dateTimeObject.year.toString();
-
-  String month = dateTimeObject.month.toString();
-
-  if (month.length == 1) {
-    month = '0$month';
-  }
-  String day = dateTimeObject.day.toString();
-  if (day.length == 1) {
-    day = '0$day';
-  }
-  String yyyymmdd = year + month + day;
   return yyyymmdd;
 }
 
@@ -29,10 +20,7 @@ DateTime createDateTimeObject(String yyyymmdd) {
 }
 
 String convertDateTimeToYYYYMMDD(DateTime dateTime) {
-  String year = dateTime.year.toString();
-  String month = dateTime.month.toString();
-  String day = dateTime.day.toString();
-
-  String yyyymmdd = year + month + day;
+  var formatter = DateFormat('yyyyMMdd');
+  String yyyymmdd = formatter.format(dateTime);
   return yyyymmdd;
 }
