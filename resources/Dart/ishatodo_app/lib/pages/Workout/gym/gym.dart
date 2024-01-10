@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:ishatodo_app/pages/Workout/gym/excercise.dart';
 import 'package:ishatodo_app/pages/Workout/gym/gym_data.dart';
 import 'package:ishatodo_app/pages/Workout/gym/gympage.dart';
 import 'package:ishatodo_app/pages/shopping-list/utilities/button.dart';
 import 'package:provider/provider.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 
 // ignore: must_be_immutable
 class GymWorkout extends StatefulWidget {
@@ -13,20 +13,19 @@ class GymWorkout extends StatefulWidget {
   final void Function(BuildContext)? deleteWorkout;
   List<Excercise> excercise = [];
 
-  GymWorkout(
-      {super.key,
-      required this.workoutName,
-      required this.excercise,
-      this.deleteWorkout});
+  GymWorkout({
+    super.key,
+    required this.workoutName,
+    required this.excercise,
+    this.deleteWorkout,
+  });
 
   @override
-  // ignore: library_private_types_in_public_api
   _GymWorkoutState createState() => _GymWorkoutState();
 }
 
 class _GymWorkoutState extends State<GymWorkout> {
   final _gymWorkoutController = TextEditingController();
-  // final _mybox = Hive.box('choreBox');
 
   @override
   void initState() {
@@ -84,122 +83,154 @@ class _GymWorkoutState extends State<GymWorkout> {
             onPressed: () => _createWorkOut(),
             child: const Icon(Icons.add),
           ),
-          body: CustomScrollView(
-            slivers: [
-              SliverAppBar(
-                automaticallyImplyLeading: true,
-                pinned: true,
-                floating: true,
-                expandedHeight: 160,
-                flexibleSpace: FlexibleSpaceBar(
-                  title: Padding(
-                    padding: const EdgeInsets.only(right: 30),
-                    child: Container(
-                      height: 50,
-                      width: 300,
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(8),
-                        color: Colors.white54,
-                      ),
-                      child: Center(
-                        child: Text('Your Gym Workouts',
-                            style: TextStyle(color: Colors.purple[700])),
-                      ),
-                    ),
-                  ),
-                  background: Image.asset('lib/pages/images/workout2.png'),
+          body: Stack(
+            children: [
+              Positioned.fill(
+                bottom: 0,
+                child: SvgPicture.asset(
+                  'lib/pages/images/gym1.svg',
+                  fit: BoxFit.cover,
+                  height: MediaQuery.of(context).size.height * .65,
+                  width: MediaQuery.of(context).size.width * .65,
                 ),
               ),
-              SliverPadding(
-                padding: const EdgeInsets.all(8.0),
-                sliver: SliverList(
-                  delegate: SliverChildBuilderDelegate(
-                    (BuildContext context, int index) {
-                      return Container(
-                        color: Colors.deepPurple[100],
-                        child: value.getGymWorkoutList().isEmpty
-                            ? _buildEmptyListWidget()
-                            : ListView.builder(
-                                shrinkWrap: true,
-                                itemCount: value.getGymWorkoutList().length,
-                                itemBuilder: (BuildContext context, int index) {
-                                  return Padding(
-                                    padding: const EdgeInsets.only(
-                                        top: 8.0,
-                                        right: 20.0,
-                                        left: 8.0,
-                                        bottom: 8.0),
-                                    child: Slidable(
-                                      endActionPane: ActionPane(
-                                        motion: const StretchMotion(),
-                                        children: [
-                                          SlidableAction(
-                                            borderRadius:
-                                                BorderRadius.circular(10),
-                                            backgroundColor: Colors.purple,
-                                            onPressed: (val) {
-                                              value.deleteWorkout(index);
-                                            },
-                                            icon: Icons.delete_forever,
-                                          ),
-                                        ],
-                                      ),
-                                      child: Container(
-                                        padding: const EdgeInsets.all(15),
-                                        decoration: BoxDecoration(
-                                          color: Colors.deepPurple[200],
-                                          borderRadius:
-                                              BorderRadius.circular(10),
+              CustomScrollView(
+                slivers: [
+                  SliverAppBar(
+                    automaticallyImplyLeading: true,
+                    pinned: true,
+                    floating: true,
+                    expandedHeight: 160,
+                    flexibleSpace: FlexibleSpaceBar(
+                      title: Padding(
+                        padding: const EdgeInsets.only(right: 30),
+                        child: Container(
+                          height: 50,
+                          width: 300,
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(8),
+                            color: Colors.white54,
+                          ),
+                          child: Center(
+                            child: Text(
+                              'Your Gym Workouts',
+                              style: TextStyle(color: Colors.purple[700]),
+                            ),
+                          ),
+                        ),
+                      ),
+                      background: Image.asset('lib/pages/images/workout2.png'),
+                    ),
+                  ),
+                  SliverPadding(
+                    padding: const EdgeInsets.all(8.0),
+                    sliver: SliverList(
+                      delegate: SliverChildBuilderDelegate(
+                        (BuildContext context, int index) {
+                          return Container(
+                            color: Colors.white24,
+                            child: value.getGymWorkoutList().isEmpty
+                                ? _buildEmptyListWidget()
+                                : ListView.builder(
+                                    shrinkWrap: true,
+                                    itemCount: value.getGymWorkoutList().length,
+                                    itemBuilder:
+                                        (BuildContext context, int index) {
+                                      return Padding(
+                                        padding: const EdgeInsets.only(
+                                          top: 8.0,
+                                          right: 20.0,
+                                          left: 8.0,
+                                          bottom: 8.0,
                                         ),
-                                        child: ListTile(
-                                          leading: SvgPicture.asset(
-                                            'lib/pages/images/dumbel.svg', // Replace with the correct path
-                                            width:
-                                                24, // Adjust the width as needed
-                                            height:
-                                                24, // Adjust the height as needed
+                                        child: Slidable(
+                                          endActionPane: ActionPane(
+                                            motion: const StretchMotion(),
+                                            children: [
+                                              SlidableAction(
+                                                borderRadius:
+                                                    BorderRadius.circular(10),
+                                                backgroundColor: Colors.purple,
+                                                onPressed: (val) {
+                                                  value.deleteWorkout(index);
+                                                },
+                                                icon: Icons.delete_forever,
+                                              ),
+                                            ],
                                           ),
-                                          title: Text(
-                                            value
-                                                .getGymWorkoutList()[index]
-                                                .workoutName,
-                                            style:
-                                                const TextStyle(fontSize: 20),
-                                          ),
-                                          trailing: IconButton(
-                                            icon:
-                                                const Icon(Icons.arrow_forward),
-                                            onPressed: () => newGymWorkoutPage(
-                                              value
-                                                  .getGymWorkoutList()[index]
-                                                  .workoutName,
+                                          child: Container(
+                                            padding: const EdgeInsets.all(15),
+                                            decoration: BoxDecoration(
+                                              color: Colors.deepPurple[200],
+                                              borderRadius:
+                                                  BorderRadius.circular(10),
+                                            ),
+                                            child: ListTile(
+                                              leading: SvgPicture.asset(
+                                                'lib/pages/images/dumbel.svg',
+                                                width: 24,
+                                                height: 24,
+                                              ),
+                                              title: Text(
+                                                value
+                                                    .getGymWorkoutList()[index]
+                                                    .workoutName,
+                                                style: const TextStyle(
+                                                  fontSize: 20,
+                                                ),
+                                              ),
+                                              trailing: IconButton(
+                                                icon: const Icon(
+                                                    Icons.arrow_forward),
+                                                onPressed: () =>
+                                                    newGymWorkoutPage(
+                                                  value
+                                                      .getGymWorkoutList()[
+                                                          index]
+                                                      .workoutName,
+                                                ),
+                                              ),
                                             ),
                                           ),
                                         ),
-                                      ),
-                                    ),
-                                  );
-                                },
-                              ),
-                      );
-                    },
-                    childCount: 1, // Since you have only one ListView.builder
+                                      );
+                                    },
+                                  ),
+                          );
+                        },
+                        childCount: 1,
+                      ),
+                    ),
                   ),
-                ),
+                ],
               ),
             ],
           ),
-          //bottomNavigationBar: const CustomBottomNavigation(),
         );
       },
     );
   }
 
   Widget _buildEmptyListWidget() {
-    return const Center(
-      child: Text(
-        'Your list is empty. Add a workout!',
-        style: TextStyle(fontSize: 18),
+    return Padding(
+      padding: const EdgeInsets.all(50),
+      child: Container(
+        padding: const EdgeInsets.all(8),
+        height: MediaQuery.of(context).size.width * .55,
+        width: MediaQuery.of(context).size.width * .75,
+        decoration: BoxDecoration(
+          color: Colors.white54,
+          borderRadius: BorderRadius.circular(10),
+        ),
+        child: const Center(
+          child: Text(
+            'Your Gym List is Empty.',
+            style: TextStyle(
+              fontWeight: FontWeight.bold,
+              fontSize: 25,
+            ),
+          ),
+        ),
       ),
     );
   }

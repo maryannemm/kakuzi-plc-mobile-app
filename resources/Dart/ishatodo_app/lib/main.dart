@@ -3,6 +3,7 @@ import 'package:hive_flutter/adapters.dart';
 import 'package:ishatodo_app/pages/Workout/gym/gym_data.dart'; // Assuming you have a GymData class
 import 'package:ishatodo_app/routes.dart';
 import 'package:provider/provider.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'home.dart';
 
 void main() async {
@@ -14,6 +15,10 @@ void main() async {
   await Hive.openBox('totalBox');
   await Hive.openBox('choreBox');
   await Hive.openBox('gymHive');
+  await Hive.openBox('studyHive');
+
+  //notifications
+  NotificationService().initNotification();
 
   runApp(const MyApp());
 }

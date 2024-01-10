@@ -43,9 +43,9 @@ dependencies:
   flutter_svg: ^2.0.9
   smooth_page_indicator: ^1.1.0
   provider:
-  
   flutter_heatmap_calendar: ^1.0.5
   google_fonts: ^6.1.0
+  flutter_local_notifications: ^16.3.0
 
 
 dev_dependencies:

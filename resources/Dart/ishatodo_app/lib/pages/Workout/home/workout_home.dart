@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:ishatodo_app/customdrawer.dart';
 import 'package:ishatodo_app/pages/Workout/gym/gym.dart';
 import 'package:ishatodo_app/pages/Workout/home/gymheatmap.dart';
 
@@ -44,7 +43,7 @@ class _WorkoutHomeState extends State<WorkoutHome> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      drawer: const CustomDrawer(),
+      drawer: const _CustomDrawer(), // Note the underscore here
       body: PageView(
         controller: _pageController,
         onPageChanged: _onPageChanged,
@@ -89,6 +88,61 @@ class _WorkoutHomeState extends State<WorkoutHome> {
               ),
             ),
             label: 'Home',
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+// Rename `_CustomDrawer` to `_CustomDrawerState`
+class _CustomDrawer extends StatelessWidget {
+  const _CustomDrawer();
+
+  @override
+  Widget build(BuildContext context) {
+    return Drawer(
+      child: Column(
+        children: [
+          const DrawerHeader(child: Text("Pages")),
+          GestureDetector(
+            onTap: () {
+              Navigator.pushNamed(context, '/home');
+            },
+            child: const ListTile(
+              leading: Icon(Icons.home),
+              title: Text('Home Page'),
+            ),
+          ),
+          GestureDetector(
+            onTap: () {
+              Navigator.pop(context);
+              Navigator.pushNamed(context, '/shopping-list');
+            },
+            child: const ListTile(
+              leading: Icon(Icons.shopping_cart),
+              title: Text('Shopping List'),
+            ),
+          ),
+          GestureDetector(
+            onTap: () {
+              Navigator.pop(context);
+              Navigator.pushNamed(context, '/Chores-list');
+            },
+            child: const ListTile(
+              leading: Icon(Icons.cleaning_services),
+              title: Text('Check List'),
+            ),
+          ),
+          GestureDetector(
+            onTap: () {
+              Navigator.pop(context);
+              Navigator.pushNamed(context, '/workout-home');
+            },
+            child: const ListTile(
+              leading: Icon(Icons.fitness_center),
+              title: Text('Work Out'),
+            ),
           ),
         ],
       ),

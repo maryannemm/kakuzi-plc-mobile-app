@@ -70,6 +70,20 @@ class CustomDrawer extends StatelessWidget {
               title: Text('Work Out'),
             ),
           ),
+          GestureDetector(
+            onTap: () {
+              Navigator.pop(context);
+              Navigator.pushNamed(context, '/study');
+            },
+            child: ListTile(
+              leading: SvgPicture.asset(
+                'lib/pages/images/reading.svg',
+                width: 13,
+                height: 13,
+              ),
+              title: Text('Read'),
+            ),
+          ),
         ],
       ),
     );

@@ -75,8 +75,8 @@ class Home extends StatelessWidget {
                       'lib/pages/images/girl-shopping.gif', '/shopping-list'),
                   _buildGridItem(context, 'CheckList',
                       'lib/pages/images/check-list.gif', '/Chores-list'),
-                  _buildGridItem(context, 'Study',
-                      'lib/pages/images/girl-study.gif', '/Chores-list'),
+                  _buildGridItem(context, 'Reading',
+                      'lib/pages/images/girl-study.gif', '/study'),
                   // Add more grid items as needed
                 ],
               ),
