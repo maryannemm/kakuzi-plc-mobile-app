@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
+import 'package:ishatodo_app/pages/Notification/notifications.dart';
+import 'package:timezone/timezone.dart' as tz;
 
-class StudyTile extends StatelessWidget {
+class StudyTile extends StatefulWidget {
   final String title;
   final DateTime studyTime;
   final String notes;
@@ -20,6 +22,46 @@ class StudyTile extends StatelessWidget {
   });
 
   @override
+  State<StudyTile> createState() => _StudyTileState();
+}
+
+class _StudyTileState extends State<StudyTile> {
+  bool isNotificationActive = false;
+
+  @override
+  void initState() {
+    super.initState();
+    listenToNotifications();
+  }
+
+  // listen to notifications clicked
+  listenToNotifications() {
+    LocalNotifications.onClickedNotification.stream.listen((event) {
+      Navigator.pushNamed(context, '/study');
+    });
+  }
+
+  void toggleNotification() {
+    setState(() {
+      isNotificationActive = !isNotificationActive;
+    });
+
+    if (isNotificationActive) {
+      // Activate the notification
+      LocalNotifications.init(); // Ensure initialization
+      LocalNotifications.showScheduleNotification(
+        title: widget.title,
+        body: widget.notes,
+        payload: widget.studyTime.toIso8601String(),
+        studyTime: tz.TZDateTime.from(widget.studyTime, tz.local),
+      );
+    } else {
+      // Deactivate the notification
+      LocalNotifications.cancel(id: 2); // Assuming id is 2, adjust as needed
+    }
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.all(10.0),
@@ -28,7 +70,8 @@ class StudyTile extends StatelessWidget {
           SlidableAction(
             borderRadius: BorderRadius.circular(10),
             backgroundColor: Colors.deepPurple,
-            onPressed: (BuildContext context) => deleteItem?.call(context),
+            onPressed: (BuildContext context) =>
+                widget.deleteItem?.call(context),
             icon: Icons.delete_forever,
           ),
         ]),
@@ -38,7 +81,7 @@ class StudyTile extends StatelessWidget {
           child: ListTile(
             title: Center(
               child: Text(
-                'Title: $title',
+                'Title: ${widget.title}',
                 style: const TextStyle(
                   fontWeight: FontWeight.bold,
                   fontSize: 25,
@@ -56,16 +99,30 @@ class StudyTile extends StatelessWidget {
                     style: const TextStyle(fontSize: 18),
                   ),
                   Text(
-                    'Summary: $notes',
+                    'Summary: ${widget.notes}',
                     style: const TextStyle(fontSize: 18),
+                  ),
+                  ElevatedButton.icon(
+                    onPressed: toggleNotification,
+                    label: Text(
+                      isNotificationActive
+                          ? 'Deactivate Notification'
+                          : 'Activate Notification',
+                    ),
+                    icon: Icon(
+                      isNotificationActive
+                          ? Icons.notifications_active
+                          : Icons.notifications_none,
+                    ),
                   ),
                 ],
               ),
             ),
             trailing: Checkbox(
-              value: isCompleted,
-              onChanged:
-                  onChanged != null ? (value) => onChanged!(value) : null,
+              value: widget.isCompleted,
+              onChanged: widget.onChanged != null
+                  ? (value) => widget.onChanged!(value)
+                  : null,
             ),
           ),
         ),
@@ -74,6 +131,6 @@ class StudyTile extends StatelessWidget {
   }
 
   String _formatStudyTime() {
-    return '${studyTime.hour}:${studyTime.minute} - ${studyTime.day}/${studyTime.month}/${studyTime.year}';
+    return '${widget.studyTime.hour}:${widget.studyTime.minute} - ${widget.studyTime.day}/${widget.studyTime.month}/${widget.studyTime.year}';
   }
 }

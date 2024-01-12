@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:hive_flutter/adapters.dart';
-import 'package:ishatodo_app/pages/Workout/gym/gym_data.dart'; // Assuming you have a GymData class
+import 'package:ishatodo_app/pages/Notification/notifications.dart';
+import 'package:ishatodo_app/pages/Workout/gym/gym_data.dart';
 import 'package:ishatodo_app/routes.dart';
 import 'package:provider/provider.dart';
-import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+
 import 'home.dart';
 
 void main() async {
@@ -12,13 +13,18 @@ void main() async {
 
   // Open Hive boxes
   await Hive.openBox('newBox');
+  //shopping list box
   await Hive.openBox('totalBox');
+  //checklist box
   await Hive.openBox('choreBox');
+  //gym box
   await Hive.openBox('gymHive');
+  //study box
   await Hive.openBox('studyHive');
 
-  //notifications
-  NotificationService().initNotification();
+  WidgetsFlutterBinding.ensureInitialized();
+  //initialize local notifications before running app
+  await LocalNotifications.init();
 
   runApp(const MyApp());
 }

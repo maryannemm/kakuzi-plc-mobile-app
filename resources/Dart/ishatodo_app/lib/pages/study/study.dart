@@ -3,6 +3,9 @@ import 'package:flutter_svg/svg.dart';
 import 'package:ishatodo_app/pages/data/studydatabase.dart';
 import 'package:ishatodo_app/pages/study/studydialogue.dart';
 import 'package:ishatodo_app/pages/study/studytile.dart';
+import 'package:ishatodo_app/pages/Notification/notifications.dart';
+import 'package:timezone/data/latest.dart' as tz;
+import 'package:timezone/timezone.dart' as tz;
 
 class StudyHome extends StatefulWidget {
   StudyHome({
@@ -42,19 +45,38 @@ class _StudyHomeState extends State<StudyHome> {
   }
 
   // Save study
-  void saveStudy() {
+  void saveStudy() async {
+    // Initialize time zones
+    tz.initializeTimeZones();
+
     final studyData = {
       'title': _titleController.text,
       'notes': _notesController.text,
       'time': selectedDateTime ?? DateTime.now(),
       'iscomplete': false,
     };
+
     setState(() {
       sdb.studyList.add(studyData);
       _notesController.clear();
       _titleController.clear();
       Navigator.pop(context);
     });
+
+    // Explicitly convert selectedDateTime to DateTime
+    final DateTime studyDateTime = selectedDateTime ?? DateTime.now();
+
+    // Convert DateTime to TZDateTime
+    final tz.TZDateTime tzDateTime =
+        tz.TZDateTime.from(studyDateTime, tz.local);
+
+    // Call showScheduleNotification with the studyTime
+    LocalNotifications.showScheduleNotification(
+      title: _titleController.text,
+      body: _notesController.text,
+      payload: 'your_payload',
+      studyTime: tzDateTime,
+    );
     sdb.updateStudy();
   }
 
@@ -67,6 +89,11 @@ class _StudyHomeState extends State<StudyHome> {
     setState(() {
       selectedDateTime = time;
     });
+  }
+
+  // Mute all notifications
+  void muteAllNotifications() {
+    LocalNotifications.cancelAll();
   }
 
   Widget displayStudyDetails() {
@@ -112,22 +139,34 @@ class _StudyHomeState extends State<StudyHome> {
       appBar: AppBar(
         title: const Text('Reading List'),
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          showDialog(
-            context: context,
-            builder: (BuildContext context) {
-              return StudyDialogue(
-                notesController: _notesController,
-                onCancel: cancelStudy,
-                titleController: _titleController,
-                onDateTimeSelected: handleDateTimeSelected,
-                onSave: saveStudy,
+      floatingActionButton: Column(
+        mainAxisAlignment: MainAxisAlignment.end,
+        children: [
+          FloatingActionButton(
+            heroTag: 1,
+            onPressed: () {
+              showDialog(
+                context: context,
+                builder: (BuildContext context) {
+                  return StudyDialogue(
+                    notesController: _notesController,
+                    onCancel: cancelStudy,
+                    titleController: _titleController,
+                    onDateTimeSelected: handleDateTimeSelected,
+                    onSave: saveStudy,
+                  );
+                },
               );
             },
-          );
-        },
-        child: const Icon(Icons.add),
+            child: const Icon(Icons.add),
+          ),
+          const SizedBox(height: 16),
+          FloatingActionButton(
+            heroTag: 2,
+            onPressed: muteAllNotifications,
+            child: const Icon(Icons.notifications_off),
+          ),
+        ],
       ),
       body: Stack(
         children: [

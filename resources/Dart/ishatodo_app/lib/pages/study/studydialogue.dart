@@ -32,7 +32,8 @@ class _StudyDialogueState extends State<StudyDialogue> {
       context: context,
       initialDate: selectedDateTime,
       firstDate: DateTime.now(),
-      lastDate: DateTime.now().add(Duration(days: 365)), // One year from now
+      lastDate:
+          DateTime.now().add(const Duration(days: 365)), // One year from now
     );
 
     if (pickedDate != null && pickedDate != selectedDateTime) {
