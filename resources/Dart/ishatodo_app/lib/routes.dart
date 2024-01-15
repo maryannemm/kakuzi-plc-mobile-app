@@ -1,6 +1,7 @@
 // ignore_for_file: prefer_const_constructors
 
 import 'package:ishatodo_app/home.dart';
+import 'package:ishatodo_app/how.dart';
 import 'package:ishatodo_app/pages/Workout/gym/gym.dart';
 import 'package:flutter/material.dart';
 import 'package:ishatodo_app/pages/Workout/gym/gympage.dart';
@@ -25,5 +26,6 @@ Map<String, WidgetBuilder> appRoutes = {
   '/study': (context) => StudyHome(),
   '/cycle_home': (context) => TabHomeWidget(),
   '/cycle_main': (context) => MainScreen(),
-  '/settings': (BuildContext context) => const SettingsScreen()
+  '/settings': (BuildContext context) => const SettingsScreen(),
+  '/how': (context) => HowToDeletePage(),
 };

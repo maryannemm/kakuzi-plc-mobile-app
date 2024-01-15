@@ -44,7 +44,7 @@ class Home extends StatelessWidget {
                   ),
                   const Center(
                     child: Text(
-                      'Welcome to Baggisha\'s App',
+                      'Welcome to Girl\'s App',
                       style:
                           TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
                     ),
@@ -77,6 +77,10 @@ class Home extends StatelessWidget {
                       'lib/pages/images/check-list.gif', '/Chores-list'),
                   _buildGridItem(context, 'Reading',
                       'lib/pages/images/girl-study.gif', '/study'),
+                  _buildGridItem(context, 'Cycle',
+                      'lib/pages/images/girl_period.gif', '/cycle_main'),
+                  _buildGridItem(
+                      context, 'How to', 'lib/pages/images/how.gif', '/how'),
                   // Add more grid items as needed
                 ],
               ),

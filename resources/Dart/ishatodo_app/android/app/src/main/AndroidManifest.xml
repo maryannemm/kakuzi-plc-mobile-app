@@ -7,7 +7,7 @@
         <uses-permission android:name="android.permission.USE_EXACT_ALARM" />
 
     <application
-        android:label="Baggisha app"
+        android:label="Girl's app"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
         <!--android:icon="@mipmap/ic_launcher">-->
