@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:hive_flutter/adapters.dart';
 import 'package:ishatodo_app/pages/Notification/notifications.dart';
 import 'package:ishatodo_app/pages/Workout/gym/gym_data.dart';
+import 'package:ishatodo_app/pages/data/cycledatabase.dart';
 import 'package:ishatodo_app/routes.dart';
 import 'package:provider/provider.dart';
 
@@ -21,10 +22,13 @@ void main() async {
   await Hive.openBox('gymHive');
   //study box
   await Hive.openBox('studyHive');
+  //cycle box
+  await Hive.openBox('myBox');
 
   WidgetsFlutterBinding.ensureInitialized();
   //initialize local notifications before running app
   await LocalNotifications.init();
+  storage.init();
 
   runApp(const MyApp());
 }

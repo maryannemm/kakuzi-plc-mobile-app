@@ -84,6 +84,20 @@ class CustomDrawer extends StatelessWidget {
               title: Text('Read'),
             ),
           ),
+          GestureDetector(
+            onTap: () {
+              Navigator.pop(context);
+              Navigator.pushNamed(context, '/cycle_main');
+            },
+            child: ListTile(
+              leading: SvgPicture.asset(
+                'lib/pages/images/cycle.svg',
+                width: 24,
+                height: 24,
+              ),
+              title: Text('Cycle Tracker'), // Updated title
+            ),
+          ),
         ],
       ),
     );
