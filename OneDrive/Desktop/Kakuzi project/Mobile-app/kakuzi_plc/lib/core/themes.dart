@@ -22,6 +22,21 @@ class CustomeThemes {
         displayMedium: TextField.materialMisspelledTextStyle,
       ),
       scaffoldBackgroundColor: Colors.grey[50],
+      elevatedButtonTheme: ElevatedButtonThemeData(
+        style: ButtonStyle(
+          backgroundColor: MaterialStateProperty.resolveWith<Color?>(
+            (Set<MaterialState> states) {
+              // Choose the color based on the button's state
+              if (states.contains(MaterialState.pressed)) {
+                // Color when the button is pressed
+                return Colors.green[700];
+              }
+              // Default color
+              return Colors.green;
+            },
+          ),
+        ),
+      ),
     );
   }
 }

@@ -12,6 +12,7 @@ class Home extends StatelessWidget {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       theme: CustomeThemes.getTheme(),
+      routes: myAppRoutes,
       home: IntroScreen(),
     );
   }
